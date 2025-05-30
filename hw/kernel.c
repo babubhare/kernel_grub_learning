@@ -1,27 +1,12 @@
-// kernel.c
+// kernel.c - Main kernel code
 void kernel_main(void) {
-    //clear_screen();
-    // const char *str = "Hello, World!";
-    // char *video = (char*) 0xb8000;
-    // for (int i = 0; str[i] != '\0'; i++) {
-    //     video[i * 2] = str[i];
-    //     video[i * 2 + 1] = 0x07; // Light grey on black
-    // }
-
-    char *vidmem = (char *) 0xb8000;
-	unsigned int i=0;
-	while(i < (80*25*2))
-	{
-		vidmem[i]=' ';
-		i++;
-		vidmem[i]='0x0F';
-		i++;
-	};
-
+    volatile char *vga = (volatile char*)0xB8000;
+    const char *msg = "Hello World from GRUB2!";
     
+    for(int i = 0; msg[i]; i++) {
+        vga[i*2] = msg[i];       // Character
+        vga[i*2 + 1] = 0x0F;     // White on black
+    }
+    
+    while(1); // Halt
 }
-
-void k_clear_screen() // clear the entire text screen
-{
-	
-};

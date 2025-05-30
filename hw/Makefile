@@ -1,25 +1,33 @@
-CC = i686-elf-gcc
-LD = i686-elf-ld
-CFLAGS = -ffreestanding -O2 -Wall -Wextra
-LDFLAGS = -T linker.ld -nostdlib
+AS = nasm
+CC = gcc
+LD = ld
+GRUB = grub-mkrescue
 
-all: kernel.bin
+CFLAGS = -m32 -ffreestanding -nostdlib -Wall -Wextra
+LDFLAGS = -m elf_i386 -T linker.ld -nostdlib
 
-kernel.bin: kernel.c linker.ld
-	$(CC) $(CFLAGS) -c kernel.c -o kernel.o
-	$(LD) $(LDFLAGS) kernel.o -o kernel.bin
-	nasm hello.asm -f bin -o hello.bin
+OBJS = boot.o kernel.o
 
-iso: kernel.bin
-	mkdir -p iso/boot/grub
-	mkdir -p iso/boot/grub2
+all: os.iso
 
-	cp kernel.bin iso/boot/
-	cp hello.bin iso/boot/
-	cp boot/grub/grub.cfg iso/boot/grub/
-	cp boot/grub/grub.cfg iso/boot/grub2/
+boot.o: boot.asm
+	$(AS) -f elf32 $< -o $@
 
-	grub-mkrescue /usr/lib/grub/i386-pc  -o hello.iso iso
+kernel.o: kernel.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+os.bin: $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $^
+
+os.iso: os.bin
+	mkdir -p isodir/boot/grub
+	cp os.bin isodir/boot/
+	echo 'menuentry "HelloOS" { multiboot /boot/os.bin }' > isodir/boot/grub/grub.cfg
+	$(GRUB) -o $@ isodir
 
 clean:
-	rm -rf *.o *.bin iso hello.iso
+	rm -f *.o os.bin os.iso
+	rm -rf isodir
+
+run:
+	qemu-system-i386 -cdrom os.iso

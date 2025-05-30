@@ -1,10 +1,12 @@
-/* linker.ld */
-ENTRY(kernel_main)
-
-SECTIONS
-{
+ENTRY(_start)
+SECTIONS {
     . = 1M;
-    .text : { *(.text*) }
-    .data : { *(.data*) }
-    .bss  : { *(.bss*)  }
+    .multiboot : {
+        *(.multiboot)
+    }
+    .text : {
+        *(.text)
+    }
+    .data : { *(.data) }
+    .bss  : { *(.bss)  }
 }
