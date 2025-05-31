@@ -22,16 +22,18 @@ os.bin: $(OBJS)
 os.iso: os.bin
 	mkdir -p isodir/boot/grub
 	cp os.bin isodir/boot/
-	echo 'menuentry "HelloOS" { multiboot /boot/os.bin }' > isodir/boot/grub/grub.cfg
+	cp boot/grub/grub.cfg isodir/boot/grub/grub.cfg
+	#echo 'menuentry "HelloOS" { multiboot /boot/os.bin }' > isodir/boot/grub/grub.cfg
 	$(GRUB) -o $@ isodir
 
 clean:
 	rm -f *.o os.bin os.iso
 	rm -rf isodir
+	
 
 run:
 	qemu-system-i386 -cdrom os.iso
 
 copy:
-	rm $HOME/shared/qemurun/os.iso
-	cp os.iso $HOME/shared/qemurun/
+	rm /root/shared/qemurun/os.iso
+	cp os.iso /root/shared/qemurun/
