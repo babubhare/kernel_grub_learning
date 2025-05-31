@@ -31,3 +31,7 @@ clean:
 
 run:
 	qemu-system-i386 -cdrom os.iso
+
+copy:
+	rm $HOME/shared/qemurun/os.iso
+	cp os.iso $HOME/shared/qemurun/
