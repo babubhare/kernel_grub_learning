@@ -39,6 +39,16 @@
 // }
 
 void kernel_main(){
+
+	volatile char *vga = (volatile char*)0xB8000;
+    const char *msg = "Hello World from GRUB2!";
+    
+    for(int i = 0; msg[i]; i++) {
+        vga[i*2] = msg[i];       // Character
+        vga[i*2 + 1] = 0x0F;     // White on black
+    }
+    
+    while(1); // Halt
 	// init_video();
 	// printstring("Welcome to the Sanderslando Kernel!!\n");
 	// printstring("Loading core components...\n");
@@ -94,6 +104,6 @@ void kernel_main(){
 	// }
 
 
-	for(;;);
+	
 }
 

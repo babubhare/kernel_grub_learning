@@ -29,7 +29,7 @@ i686-elf-gcc  -c hal/i386/interrupts.c -m32 -o interrupts.o -std=gnu99 -ffreesta
 # i686-elf-gcc  -c dev/math.c -m32 -o math.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -g || exit
 # i686-elf-gcc  -c -c dev/uhci.c -m32 -o uhci.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -g || exit
 # i686-elf-gcc  -c dev/xhci_hid.c -m32 -o xhci_hid.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -g || exit
-i686-elf-gcc  -c -I./ -I./exec exec/program.c -m32 -o program.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -g || exit
+#i686-elf-gcc  -c -I./ -I./exec exec/program.c -m32 -o program.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -g || exit
 
 i686-elf-gcc  -T linker.ld -o myos.bin -m32 -g -ffreestanding -O2 -nostdlib boot.o kernel.o program.o io_ports.o interrupts.o #com_port.o ide.o pci.o memory.o timer.o video.o videoasm.o isr.o ps2.o device.o iso9660.o elf.o vbox.o xhci.o acpi.o ahci.o mbr.o ext.o fat.o math.o uhci.o xhci_hid.o || exit
 
